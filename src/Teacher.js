@@ -7,11 +7,11 @@ export default class teacher extends Component {
     }
 
     componentDidMount = async () => {
-        const URL = 'https://alchezoomy2.herokuapp.com/oauth';
+        const serverURL = 'https://alchezoomy2.herokuapp.com';
         try {
             const returnedObject = await fetch
-                .post(URL)
-                .send({ token: this.props.code });
+                .post(serverURL + '/oauth')
+                .send({ code: this.props.code });
 
             const userInfo = returnedObject.body;
 
@@ -20,7 +20,15 @@ export default class teacher extends Component {
                 loading: false
             })
 
-            // this.props.handleSetState({ token: this.returnedToken.body });
+            console.log('------------------------------------');
+            console.log(`userInfo.access_token:  ${userInfo.access_token}`);
+            console.log('------------------------------------');
+
+            const returnedMeetingsObject = await fetch
+                .post(serverURL + '/meetings/unpublished')
+                .send({ access_token: this.props.appState.token })
+            console.log('meetingInfo')
+            console.log(returnedMeetingsObject);
 
         } catch (e) {
             throw e;
@@ -29,12 +37,12 @@ export default class teacher extends Component {
     render() {
         return (
             <div className='teacher'>
-
+                <Link to='/'>HOME</Link>
                 {this.state.loading
                     ? <p>loading:  {this.props.code}</p>
                     : <div>
-                        <p>{this.props.code}</p>
-                        <p>{this.props.appState.appState}</p>
+                        <p>{this.props.appState.user_name}</p>
+                        <img src={this.props.appState.pic_url} alt={this.props.appState.user_name} />
                     </div>
                 }
             </div>
