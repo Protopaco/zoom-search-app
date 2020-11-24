@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import fetch from 'superagent';
+import { Link } from "react-router-dom";
 
 export default class teacher extends Component {
     state = {
@@ -19,14 +20,14 @@ export default class teacher extends Component {
             this.setState({
                 loading: false
             })
-
+            console.log(userInfo);
             console.log('------------------------------------');
             console.log(`userInfo.access_token:  ${userInfo.access_token}`);
             console.log('------------------------------------');
 
             const returnedMeetingsObject = await fetch
                 .post(serverURL + '/meetings/unpublished')
-                .send({ access_token: this.props.appState.token })
+                .send({ access_token: userInfo.access_token })
             console.log('meetingInfo')
             console.log(returnedMeetingsObject);
 
